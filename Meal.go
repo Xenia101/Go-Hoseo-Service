@@ -78,8 +78,3 @@ func MealbyWeek() string {
 		return ""
 	}
 }
-
-func main() {
-	data := MealbyWeek()
-	fmt.Println(data)
-}
