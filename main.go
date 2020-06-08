@@ -51,25 +51,35 @@ func MealData(url string) Meal {
 	return r
 }
 
-func main() {
+func MealbyWeek() string {
 	data := MealData("http://hoseoin.hoseo.ac.kr/dbimage/livinghall/Menu/livinghall.js")
 
 	switch time.Now().Weekday() {
 	case time.Monday:
-		fmt.Printf("%s\n\n%s", data.Eat11, data.Eat12)
+		r := data.Eat11 + "\n\n" + data.Eat12
+		return r
 	case time.Tuesday:
-		fmt.Printf("%s\n\n%s", data.Eat21, data.Eat22)
+		r := data.Eat21 + "\n\n" + data.Eat22
+		return r
 	case time.Wednesday:
-		fmt.Printf("%s\n\n%s", data.Eat31, data.Eat32)
+		r := data.Eat31 + "\n\n" + data.Eat32
+		return r
 	case time.Thursday:
-		fmt.Printf("%s\n\n%s", data.Eat41, data.Eat42)
+		r := data.Eat41 + "\n\n" + data.Eat42
+		return r
 	case time.Friday:
-		fmt.Printf("%s\n\n%s", data.Eat51, data.Eat52)
+		r := data.Eat51 + "\n\n" + data.Eat52
+		return r
 	case time.Saturday:
-		fmt.Println("")
+		return ""
 	case time.Sunday:
-		fmt.Println("")
+		return ""
 	default:
-		fmt.Println("Default")
+		return ""
 	}
+}
+
+func main() {
+	data := MealbyWeek()
+	fmt.Println(data)
 }
