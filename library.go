@@ -55,6 +55,14 @@ func LibraryData(url string) Library {
 
 func AsanLibrary(data Library) {
 	fmt.Println(data.Data.List[0])
+	fmt.Printf("\n\n")
+
+	for _, s := range data.Data.List {
+		fmt.Println(s.Name)        // 열람실
+		fmt.Println(s.ActiveTotal) // 전체 좌석수
+		fmt.Println(s.Occupied)    // 사용 좌석수
+		fmt.Println(s.Available)   // 잔여 좌석수
+	}
 }
 
 func CheonanLibrary(data Library) {
