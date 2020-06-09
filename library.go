@@ -54,7 +54,7 @@ func LibraryData(url string) Library {
 }
 
 func AsanLibrary(data Library) {
-	fmt.Println(data)
+	fmt.Println(data.Data.List[0])
 }
 
 func CheonanLibrary(data Library) {
@@ -62,7 +62,8 @@ func CheonanLibrary(data Library) {
 }
 
 func main() {
-	d := LibraryData("https://library.hoseo.ac.kr/smufu-api/pc/1/rooms-at-seat?branchGroupId=1&isActive=true")
-	AsanLibrary(d)
-	CheonanLibrary(d)
+	Asan := LibraryData("https://library.hoseo.ac.kr/smufu-api/pc/1/rooms-at-seat?branchGroupId=1&isActive=true")
+	//Cheonan := LibraryData("https://library.hoseo.ac.kr/smufu-api/pc/2/rooms-at-seat?branchGroupId=2&isActive=true")
+	AsanLibrary(Asan)
+	//CheonanLibrary(Cheonan)
 }
