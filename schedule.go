@@ -10,10 +10,12 @@ import (
 	"github.com/antchfx/htmlquery"
 )
 
-func getRequest(url string) (string, error) {
+func getRequest() (string, error) {
 	client := &http.Client{}
 
-	req, _ := http.NewRequest("GET", url, nil)
+	URL := "http://www.hoseo.ac.kr/Home/SCDList.mbz?action=MAPP_1708250140&schClassify=%ED%95%99%EB%B6%80"
+
+	req, _ := http.NewRequest("GET", URL, nil)
 	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
 	res, err := client.Do(req)
 	if err != nil {
@@ -22,25 +24,27 @@ func getRequest(url string) (string, error) {
 	defer res.Body.Close()
 
 	body, err := ioutil.ReadAll(res.Body)
-
-	fmt.Println(string(body))
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	return string(body), nil
 }
 
 func GetSchedule() (string, error) {
-	URL := "http://www.hoseo.ac.kr/Home/SCDList.mbz?action=MAPP_1708250140&schClassify=%ED%95%99%EB%B6%80"
-	html, err := getRequest(URL)
+	html, err := getRequest()
 	if err != nil {
 		return html, err
 	}
 
 	doc, err := htmlquery.Parse(strings.NewReader(html))
-	fmt.Println(doc)
-	list := htmlquery.Find(doc, "firstDate")
+	list := htmlquery.Find(doc, "//tr .firstDate")
 
 	for _, v := range list {
-		fmt.Println(htmlquery.InnerText(v))
+		s := htmlquery.InnerText(v)
+		s = strings.Replace(s, "\t", "", -1)
+		s = strings.Replace(s, "\n", "", -1)
+		fmt.Println(s)
 	}
 
 	return html, err
