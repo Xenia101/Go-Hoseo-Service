@@ -34,6 +34,13 @@ type Library struct {
 	} `json:"data"`
 }
 
+type Asan struct {
+	ActiveTotal int    `json:"ActiveTotal"`
+	Available   int    `json:"Available"`
+	Name        string `json:"Name"`
+	Occupied    int    `json:"Occupied"`
+}
+
 func LibraryData(url string) Library {
 	res, err := http.Get(url)
 	if err != nil {
@@ -54,15 +61,22 @@ func LibraryData(url string) Library {
 }
 
 func AsanLibrary(data Library) {
-	fmt.Println(data.Data.List[0])
-	fmt.Printf("\n\n")
-
 	for _, s := range data.Data.List {
-		fmt.Println(s.Name)        // 열람실
-		fmt.Println(s.ActiveTotal) // 전체 좌석수
-		fmt.Println(s.Occupied)    // 사용 좌석수
-		fmt.Println(s.Available)   // 잔여 좌석수
+		_json := make(map[string]interface{})
+
+		_json["Name"] = s.Name               // 열람실
+		_json["ActiveTotal"] = s.ActiveTotal // 전체 좌석수
+		_json["Occupied"] = s.Occupied       // 사용 좌석수
+		_json["Available"] = s.Available     // 잔여 좌석수
+
+		doc, _ := json.Marshal(_json)
+		Asan := Asan{}
+		json.Unmarshal([]byte(doc), &Asan)
+		fmt.Printf("%+v\n", Asan)
 	}
+
+	Asan := &Asan{}
+	log.Printf("%#v", Asan)
 }
 
 func CheonanLibrary(data Library) {
