@@ -45,7 +45,23 @@ type AsanItem struct {
 	Items []Asan
 }
 
-func (box *AsanItem) AddItem(item Asan) []Asan {
+type Cheonan struct {
+	Name        string `json:"Name"`
+	ActiveTotal int    `json:"ActiveTotal"`
+	Occupied    int    `json:"Occupied"`
+	Available   int    `json:"Available"`
+}
+
+type CheonanItem struct {
+	Items []Cheonan
+}
+
+func (box *AsanItem) A_AddItem(item Asan) []Asan {
+	box.Items = append(box.Items, item)
+	return box.Items
+}
+
+func (box *CheonanItem) C_AddItem(item Cheonan) []Cheonan {
 	box.Items = append(box.Items, item)
 	return box.Items
 }
@@ -69,23 +85,39 @@ func LibraryData(url string) Library {
 	return r
 }
 
-func AsanLibrary(data Library) {
+func AsanLibrary(data Library) interface{} {
 	items := []Asan{}
 	seatBox := AsanItem{items}
 	for _, s := range data.Data.List {
-		S_Asan := Asan{Name: s.Name, ActiveTotal: s.ActiveTotal, Occupied: s.Occupied, Available: s.Available}
-		seatBox.AddItem(S_Asan)
+		S_Asan := Asan{
+			Name:        s.Name,
+			ActiveTotal: s.ActiveTotal,
+			Occupied:    s.Occupied,
+			Available:   s.Available}
+		seatBox.A_AddItem(S_Asan)
 	}
-	fmt.Println(seatBox.Items)
+	return seatBox.Items
 }
 
-func CheonanLibrary(data Library) {
-	fmt.Println(data)
+func CheonanLibrary(data Library) interface{} {
+	items := []Cheonan{}
+	seatBox := CheonanItem{items}
+	for _, s := range data.Data.List {
+		S_Cheonan := Cheonan{Name: s.Name,
+			ActiveTotal: s.ActiveTotal,
+			Occupied:    s.Occupied,
+			Available:   s.Available}
+		seatBox.C_AddItem(S_Cheonan)
+	}
+	return seatBox.Items
 }
 
 func main() {
 	Asan := LibraryData("https://library.hoseo.ac.kr/smufu-api/pc/1/rooms-at-seat?branchGroupId=1&isActive=true")
-	//Cheonan := LibraryData("https://library.hoseo.ac.kr/smufu-api/pc/2/rooms-at-seat?branchGroupId=2&isActive=true")
-	AsanLibrary(Asan)
-	//CheonanLibrary(Cheonan)
+	Cheonan := LibraryData("https://library.hoseo.ac.kr/smufu-api/pc/2/rooms-at-seat?branchGroupId=2&isActive=true")
+	ResultOfAsan := AsanLibrary(Asan)
+	ResultOfCheonan := CheonanLibrary(Cheonan)
+
+	fmt.Println(ResultOfAsan)
+	fmt.Println(ResultOfCheonan)
 }
