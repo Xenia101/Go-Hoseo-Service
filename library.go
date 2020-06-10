@@ -35,10 +35,19 @@ type Library struct {
 }
 
 type Asan struct {
-	ActiveTotal int    `json:"ActiveTotal"`
-	Available   int    `json:"Available"`
 	Name        string `json:"Name"`
+	ActiveTotal int    `json:"ActiveTotal"`
 	Occupied    int    `json:"Occupied"`
+	Available   int    `json:"Available"`
+}
+
+type AsanItem struct {
+	Items []Asan
+}
+
+func (box *AsanItem) AddItem(item Asan) []Asan {
+	box.Items = append(box.Items, item)
+	return box.Items
 }
 
 func LibraryData(url string) Library {
@@ -61,22 +70,13 @@ func LibraryData(url string) Library {
 }
 
 func AsanLibrary(data Library) {
+	items := []Asan{}
+	seatBox := AsanItem{items}
 	for _, s := range data.Data.List {
-		_json := make(map[string]interface{})
-
-		_json["Name"] = s.Name               // 열람실
-		_json["ActiveTotal"] = s.ActiveTotal // 전체 좌석수
-		_json["Occupied"] = s.Occupied       // 사용 좌석수
-		_json["Available"] = s.Available     // 잔여 좌석수
-
-		doc, _ := json.Marshal(_json)
-		Asan := Asan{}
-		json.Unmarshal([]byte(doc), &Asan)
-		fmt.Printf("%+v\n", Asan)
+		S_Asan := Asan{Name: s.Name, ActiveTotal: s.ActiveTotal, Occupied: s.Occupied, Available: s.Available}
+		seatBox.AddItem(S_Asan)
 	}
-
-	Asan := &Asan{}
-	log.Printf("%#v", Asan)
+	fmt.Println(seatBox.Items)
 }
 
 func CheonanLibrary(data Library) {
