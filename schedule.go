@@ -31,25 +31,42 @@ func getRequest() (string, error) {
 	return string(body), nil
 }
 
-func GetSchedule() (string, error) {
+func GetSchedule() []string {
 	html, err := getRequest()
 	if err != nil {
-		return html, err
+		log.Fatal(err)
 	}
 
 	doc, err := htmlquery.Parse(strings.NewReader(html))
-	list := htmlquery.Find(doc, "//tr .firstDate")
 
-	for _, v := range list {
-		s := htmlquery.InnerText(v)
-		s = strings.Replace(s, "\t", "", -1)
-		s = strings.Replace(s, "\n", "", -1)
-		fmt.Println(s)
+	var Date []string
+	var info []string
+
+	firstDate := htmlquery.Find(doc, "//td//.firstDate") // Date
+	for i, v := range firstDate {
+		e_firstDate := strings.Replace(htmlquery.InnerText(v), "\n", "", -1)
+		e_firstDate = strings.Replace(e_firstDate, "\t", "", -1)
+		if i%5 == 0 {
+			Date = append(Date, e_firstDate)
+		}
 	}
 
-	return html, err
+	h4 := htmlquery.Find(doc, "//h4") // info
+	for _, v := range h4 {
+		h4 := strings.Replace(htmlquery.InnerText(v), "\n", "", -1)
+		h4 = strings.Replace(h4, "\t", "", -1)
+		info = append(info, h4)
+	}
+
+	var Schedule []string
+	for i, _ := range Date {
+		text := Date[i] + " : " + info[i]
+		Schedule = append(Schedule, text)
+	}
+
+	return Schedule
 }
 
 func main() {
-	GetSchedule()
+	fmt.Println(GetSchedule())
 }
