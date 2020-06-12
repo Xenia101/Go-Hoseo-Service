@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -59,7 +58,7 @@ func GetSchedule() []string {
 	}
 
 	var Schedule []string
-	for i, _ := range Date {
+	for i := range Date {
 		text := Date[i] + " : " + info[i]
 		Schedule = append(Schedule, text)
 	}
@@ -67,6 +66,8 @@ func GetSchedule() []string {
 	return Schedule
 }
 
+/*
 func main() {
 	fmt.Println(GetSchedule())
 }
+*/
