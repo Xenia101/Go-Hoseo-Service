@@ -1,0 +1,5 @@
+package GETschedule
+
+func init() {
+
+}

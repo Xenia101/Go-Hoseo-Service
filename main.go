@@ -16,6 +16,7 @@ func main() {
 	mh.H("/simple4", new(simpleHandler))
 
 	server := http.Server{
+		Addr:    ":5577",
 		Handler: mux,
 	}
 
